@@ -8,9 +8,11 @@ devices only.  If you want to make your app available to devices that don't supp
 you should omit this in the manifest.  Instead, determine BLE capability by using
 PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -20,7 +22,6 @@ PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
