@@ -1,10 +1,10 @@
-BlunoBasicDemo
+BlunoRobotHand
 =======================
 
 # _Brief_
 
 
-_Description: This is a basic Demo for Bluno including all the code and executable on Android,IOS and Android.You can easily develop your own with this Demo._
+_Description: This is a basic Demo app for Bluno + Robot Hand via Android.
 
 ## BLE Details
 
@@ -31,9 +31,8 @@ _to start working on the project, take a look at the following steps_
 
 1. _What dependencies does it have and how do I install them?_
 
-You may need the Arduino IDE<br />  
-If you want to recompile the application on Android device, you will need the eclipse with Android bundle.<br />  
-If you want to recompile the application on IOS device, you will need xcode.<br />  
+You may need the VSCcode and Platform IO to compile for an Arduino Platform
+Android studio for the Android App
 
 2. _How can I see the project working before I change anything?_
 
@@ -50,19 +49,17 @@ Android 4.3+ Devices with BLE or IOS 7.0+ Devices<br />
 You can get it at<br />  
 DFRobot.com<br />  
 
-IOS devices or Android devices with 4.3+ ROM<br />  
+Android devices with SDK 26
 
 4. _How t start?_
 
-Go to this site for more tutorial:<br />  
+For bluno devices: <br />  
 http://www.dfrobot.com/wiki/index.php/Bluno_SKU:DFR0267
 
 
 ## Contributing changes
 
-- _Join the forums for dev discussions_
-- _More information at DFRobot technical support_
-- _"Please open github issues"_
+
 
 ## License
 
