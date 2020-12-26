@@ -1,43 +1,52 @@
 package com.dfrobot.angelo.blunobasicdemo
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import android.view.View
 import android.widget.*
-import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.appcompat.widget.SwitchCompat
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.material.slider.Slider
+import kotlin.math.roundToInt
 
 class MainActivity : BlunoLibrary() {
     private var buttonScan: Button? = null
     private var buttonSerialSend: Button? = null
     private var serialSendText: EditText? = null
     private var serialReceivedText: TextView? = null
-    private var debugSwitch: Switch? = null
+    private var debugSwitch: SwitchCompat? = null
+    private var buttonSync: Button? = null
     private val fingerText = arrayOfNulls<TextView>(4)
-    private val fingerSeek = arrayOfNulls<SeekBar>(4)
+    private val fingerSlider = arrayOfNulls<Slider>(4)
+    private var safeZoneSlider: Slider? = null
+    private var safeZoneText: TextView? = null
     private val gripButton = arrayOfNulls<Button>(6)
     private var gripSet = arrayOfNulls<String>(6)
+    private var isSyncing = false
+    private var syncString = ""
+
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //setSupportActionBar(findViewById(R.id.my_toolbar))
         onCreateProcess() //onCreate Process by BlunoLibrary
 
         requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 1)
         serialBegin(115200) //set the Uart Baudrate on BLE chip to 115200
 
-
-
-        serialReceivedText = findViewById<View>(R.id.serialReviecedText) as TextView //initial the EditText of the received data
+        serialReceivedText = findViewById<View>(R.id.serialReveicedText) as TextView //initial the EditText of the received data
         serialSendText = findViewById<View>(R.id.serialSendText) as EditText //initial the EditText of the sending data
         buttonSerialSend = findViewById<View>(R.id.buttonSerialSend) as Button //initial the button for sending the data
         buttonSerialSend!!.setOnClickListener {
-            serialSend(serialSendText!!.text.toString()+"\n") //send the data to the BLUNO
+            serialSend(serialSendText!!.text.toString() + "\n") //send the data to the BLUNO
         }
         buttonScan = findViewById<View>(R.id.buttonScan) as Button //initial the button for scanning the BLE device
         buttonScan!!.setOnClickListener {
@@ -57,6 +66,11 @@ class MainActivity : BlunoLibrary() {
                 buttonScanOnClickProcess() //Alert Dialog for selecting the BLE device
             }
         }
+        buttonSync = findViewById<View>(R.id.syncButton) as Button
+        buttonSync!!.setOnClickListener {
+            serialSend("Z\n")
+            isSyncing = true
+        }
 
         //textView fingers
         fingerText[0] = findViewById<View>(R.id.finger0text) as TextView
@@ -64,22 +78,31 @@ class MainActivity : BlunoLibrary() {
         fingerText[2] = findViewById<View>(R.id.finger2text) as TextView
         fingerText[3] = findViewById<View>(R.id.finger3text) as TextView
         //Seekbar declarations
-        fingerSeek[0] = findViewById<View>(R.id.finger0Bar) as SeekBar
-        fingerSeek[1] = findViewById<View>(R.id.finger1Bar) as SeekBar
-        fingerSeek[2] = findViewById<View>(R.id.finger2Bar) as SeekBar
-        fingerSeek[3] = findViewById<View>(R.id.finger3Bar) as SeekBar
+        fingerSlider[0] = findViewById<View>(R.id.finger0Bar) as Slider
+        fingerSlider[1] = findViewById<View>(R.id.finger1Bar) as Slider
+        fingerSlider[2] = findViewById<View>(R.id.finger2Bar) as Slider
+        fingerSlider[3] = findViewById<View>(R.id.finger3Bar) as Slider
         for (a in 0..3) {
-            fingerSeek[a]!!.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-                    val toSend = "F$a P$i"
-                    fingerText[a]!!.text = "Finger $a: $i"
+            fingerSlider[a]!!.addOnChangeListener { slider, i, fromUser ->
+                if(!isSyncing) {
+                    val toSend = "F$a P${i.roundToInt()}"
                     serialSendText!!.setText(toSend)
                     serialSend(toSend + "\n")
                 }
+                fingerText[a]!!.text = "Finger $a: ${i.roundToInt()}"
+            }
+        }
 
-                override fun onStartTrackingTouch(seekBar: SeekBar) {}
-                override fun onStopTrackingTouch(seekBar: SeekBar) {}
-            })
+        safeZoneText = findViewById<View>(R.id.safeZoneText) as TextView
+        safeZoneSlider = findViewById<View>(R.id.safeZoneBar) as Slider
+        safeZoneSlider!!.addOnChangeListener { slider, value, fromUser ->
+            if (!isSyncing) {
+                val toSend = "B${value.roundToInt()}"
+                safeZoneText!!.text = "Safe Zone: ${value.roundToInt()}"
+                serialSendText!!.setText(toSend)
+                serialSend(toSend + "\n")
+            }
+            safeZoneText!!.text = "Safe Zone: ${value.roundToInt()}"
         }
         gripButton[0] = findViewById<View>(R.id.fistBtn) as Button
         gripButton[1] = findViewById<View>(R.id.palmBtn) as Button
@@ -91,14 +114,14 @@ class MainActivity : BlunoLibrary() {
             gripButton[i]!!.setOnClickListener {
                 val progress = gripSet[i]!!.split(",").toTypedArray()
                 for (j in 0..3) {
-                    fingerSeek[j]!!.progress = progress[j].toInt()
+                    fingerSlider[j]!!.value = progress[j].toFloat()
                 }
                 //Toast.makeText(MainActivity.this, gripSet[finalI], Toast.LENGTH_SHORT).show();
             }
             gripButton[i]!!.setOnLongClickListener {
                 var getFingerPos = ""
                 for (j in 0..3) {
-                    getFingerPos += fingerSeek[j]!!.progress.toString()
+                    getFingerPos += fingerSlider[j]!!.value.roundToInt().toString()
                     if (j < 3) getFingerPos += ","
                 }
                 gripSet[i] = getFingerPos
@@ -124,6 +147,8 @@ class MainActivity : BlunoLibrary() {
         serialSendText!!.visibility = v
         findViewById<View>(R.id.editText2)!!.visibility = v
         findViewById<View>(R.id.scrollView)!!.visibility = v
+        safeZoneSlider!!.visibility = v
+        safeZoneText!!.visibility = v
     }
     private fun saveData() {
         var gripSet_All: String? = ""
@@ -162,7 +187,7 @@ class MainActivity : BlunoLibrary() {
                     "0,0,0,0")           //open
 
         }
-        var isChecked: Boolean = sharedPreferences.getBoolean(DEBUG_SAVE, true)
+        val isChecked: Boolean = sharedPreferences.getBoolean(DEBUG_SAVE, true)
         debugSwitch?.isChecked = isChecked //set checked value
         if (isChecked) setDebug(View.VISIBLE)
         else setDebug(View.GONE)
@@ -174,8 +199,8 @@ class MainActivity : BlunoLibrary() {
         onResumeProcess() //onResume Process by BlunoLibrary
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        onActivityResultProcess(requestCode, resultCode, data) //onActivityResult Process by BlunoLibrary
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        onActivityResultProcess(requestCode, resultCode) //onActivityResult Process by BlunoLibrary
         super.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -195,6 +220,7 @@ class MainActivity : BlunoLibrary() {
         onDestroyProcess() //onDestroy Process by BlunoLibrary
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onConectionStateChange(theConnectionState: connectionStateEnum) { //Once connection state changes, this function will be called
         when (theConnectionState) {
             connectionStateEnum.isConnected -> buttonScan!!.text = "Connected"
@@ -208,10 +234,28 @@ class MainActivity : BlunoLibrary() {
     }
 
     override fun onSerialReceived(theString: String) {                            //Once connection data received, this function will be called
-        // TODO Auto-generated method stub
+        if (isSyncing) {
+            try {
+                syncString = theString.takeLastWhile { it < 'L' }.trim()
+                val inputArraySync = syncString.split(",").toTypedArray()
+                for (j in 0..3) {
+                    var minMaxVal :Float = inputArraySync[j].toFloat()
+                    if (minMaxVal > 100) minMaxVal = 100F
+                    else if (minMaxVal<0) minMaxVal = 0F
+                    fingerSlider[j]!!.value = minMaxVal
+                }
+                //Toast.makeText(this, inputArraySync[4], Toast.LENGTH_SHORT).show();
+                safeZoneSlider!!.value = inputArraySync[4].toFloat() // Get safezone
+            }
+            catch (e: Exception){
+                Toast.makeText(this, "ERROR not synced, try again", Toast.LENGTH_SHORT).show()
+            }
+            isSyncing = false
+        }
+
         serialReceivedText!!.append(theString) //append the text into the EditText
         //The Serial data from the BLUNO may be sub-packaged, so using a buffer to hold the String is a good choice.
-        (serialReceivedText!!.parent as ScrollView).fullScroll(View.FOCUS_DOWN)
+        (serialReceivedText!!.parent as ScrollView).fullScroll(View.FOCUS_DOWN);
     }
 
     companion object {

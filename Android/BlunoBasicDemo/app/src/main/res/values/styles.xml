@@ -1,8 +1,13 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.DeviceDefault">
-        <!-- Customize your theme here. -->
+<!--    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">-->
+<!--        <item name="appBarLayoutStyle">@style/appbarColor</item>-->
+<!--    </style>-->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="colorAccent">#dc6803</item>
+        <item name="colorPrimary">#0377dc</item>
+        <item name="colorPrimaryDark">#004c8c</item>
     </style>
-
 </resources>
