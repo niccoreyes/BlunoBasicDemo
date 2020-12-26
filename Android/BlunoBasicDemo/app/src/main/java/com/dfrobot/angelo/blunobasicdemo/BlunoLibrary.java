@@ -3,6 +3,7 @@ package com.dfrobot.angelo.blunobasicdemo;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.bluetooth.le.BluetoothLeScanner;
 import android.os.Handler;
 import android.os.IBinder;
 import android.annotation.SuppressLint;
@@ -29,9 +30,11 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public abstract  class BlunoLibrary  extends Activity{
+import androidx.appcompat.app.AppCompatActivity;
 
-	private Context mainContext=this;
+public abstract  class BlunoLibrary  extends AppCompatActivity {
+
+	private final Context mainContext=this;
 
 	
 //	public BlunoLibrary(Context theContext) {
@@ -73,6 +76,7 @@ public abstract  class BlunoLibrary  extends Activity{
             new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
 	private LeDeviceListAdapter mLeDeviceListAdapter=null;
 	private BluetoothAdapter mBluetoothAdapter;
+	private BluetoothLeScanner bluetoothLeScanner;
 	private boolean mScanning =false;
 	AlertDialog mScanDeviceDialog;
     private String mDeviceName;
@@ -145,12 +149,12 @@ public abstract  class BlunoLibrary  extends Activity{
 		        }
 		        else{
 
-					System.out.println("onListItemClick " + device.getName().toString());
+					System.out.println("onListItemClick " + device.getName());
 
 					System.out.println("Device Name:"+device.getName() + "   " + "Device Name:" + device.getAddress());
 
-					mDeviceName=device.getName().toString();
-					mDeviceAddress=device.getAddress().toString();
+					mDeviceName= device.getName();
+					mDeviceAddress= device.getAddress();
 
 		        	if (mBluetoothLeService.connect(mDeviceAddress)) {
 				        Log.d(TAG, "Connect request success");
@@ -241,12 +245,11 @@ public abstract  class BlunoLibrary  extends Activity{
         mBluetoothLeService = null;
 	}
 	
-	public void onActivityResultProcess(int requestCode, int resultCode, Intent data) {
+	public void onActivityResultProcess(int requestCode, int resultCode) {
 		// User chose not to enable Bluetooth.
 		if (requestCode == REQUEST_ENABLE_BT
 				&& resultCode == Activity.RESULT_CANCELED) {
 			((Activity) mainContext).finish();
-			return;
 		}
 	}
 
@@ -267,10 +270,7 @@ public abstract  class BlunoLibrary  extends Activity{
 		mBluetoothAdapter = bluetoothManager.getAdapter();
 	
 		// Checks if Bluetooth is supported on the device.
-		if (mBluetoothAdapter == null) {
-			return false;
-		}
-		return true;
+		return mBluetoothAdapter != null;
 	}
 	
 	 // Handles various events fired by the Service.
@@ -344,24 +344,20 @@ public abstract  class BlunoLibrary  extends Activity{
     {
     	switch (mConnectionState) {
 		case isNull:
-			mConnectionState=connectionStateEnum.isScanning;
-			onConectionStateChange(mConnectionState);
-			scanLeDevice(true);
-			mScanDeviceDialog.show();
-			break;
 		case isToScan:
 			mConnectionState=connectionStateEnum.isScanning;
 			onConectionStateChange(mConnectionState);
 			scanLeDevice(true);
 			mScanDeviceDialog.show();
 			break;
-		case isScanning:
-			
-			break;
 
-		case isConnecting:
-			
-			break;
+//		case isScanning:
+//
+//			break;
+//
+//		case isConnecting:
+//
+//			break;
 		case isConnected:
 			mBluetoothLeService.disconnect();
             mHandler.postDelayed(mDisonnectingOverTimeRunnable, 10000);
@@ -370,9 +366,9 @@ public abstract  class BlunoLibrary  extends Activity{
 			mConnectionState=connectionStateEnum.isDisconnecting;
 			onConectionStateChange(mConnectionState);
 			break;
-		case isDisconnecting:
-			
-			break;
+//		case isDisconnecting:
+//
+//			break;
 
 		default:
 			break;
@@ -507,8 +503,8 @@ public abstract  class BlunoLibrary  extends Activity{
     }
 	
 	private class LeDeviceListAdapter extends BaseAdapter {
-		private ArrayList<BluetoothDevice> mLeDevices;
-		private LayoutInflater mInflator;
+		private final ArrayList<BluetoothDevice> mLeDevices;
+		private final LayoutInflater mInflator;
 
 		public LeDeviceListAdapter() {
 			super();
