@@ -8,21 +8,26 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.appcompat.view.menu.MenuView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
 import kotlin.math.roundToInt
 
 class MainActivity : BlunoLibrary() {
-    private var buttonScan: Button? = null
+    //private var buttonScan: Button? = null
     private var buttonSerialSend: Button? = null
     private var serialSendText: EditText? = null
     private var serialReceivedText: TextView? = null
-    private var debugSwitch: SwitchCompat? = null
-    private var buttonSync: Button? = null
+    //private var debugSwitch: SwitchCompat? = null
+    //private var buttonSync: Button? = null
     private val fingerText = arrayOfNulls<TextView>(4)
     private val fingerSlider = arrayOfNulls<Slider>(4)
     private var safeZoneSlider: Slider? = null
@@ -31,6 +36,7 @@ class MainActivity : BlunoLibrary() {
     private var gripSet = arrayOfNulls<String>(6)
     private var isSyncing = false
     private var syncString = ""
+    private var topAppBar: MaterialToolbar? = null
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +44,7 @@ class MainActivity : BlunoLibrary() {
         setContentView(R.layout.activity_main)
         //setSupportActionBar(findViewById(R.id.my_toolbar))
         onCreateProcess() //onCreate Process by BlunoLibrary
+        topAppBar = findViewById<View>(R.id.topAppBar) as MaterialToolbar
 
         requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 1)
         serialBegin(115200) //set the Uart Baudrate on BLE chip to 115200
@@ -48,29 +55,32 @@ class MainActivity : BlunoLibrary() {
         buttonSerialSend!!.setOnClickListener {
             serialSend(serialSendText!!.text.toString() + "\n") //send the data to the BLUNO
         }
-        buttonScan = findViewById<View>(R.id.buttonScan) as Button //initial the button for scanning the BLE device
-        buttonScan!!.setOnClickListener {
-            val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
-            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                val requestCheck = ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION)
-                if (requestCheck) {
-                    requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 1)
-                } else {
-                    AlertDialog.Builder(this@MainActivity)
-                            .setTitle("Permission Required")
-                            .setMessage("Please enable location permission to use this application.")
-                            .setNeutralButton("I Understand", null)
-                            .show()
-                }
-            } else {
-                buttonScanOnClickProcess() //Alert Dialog for selecting the BLE device
-            }
-        }
-        buttonSync = findViewById<View>(R.id.syncButton) as Button
-        buttonSync!!.setOnClickListener {
-            serialSend("Z\n")
-            isSyncing = true
-        }
+//        buttonScan = findViewById<View>(R.id.buttonScan) as Button //initial the button for scanning the BLE device
+//        buttonScan!!.setOnClickListener {
+//            val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
+//            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+//                val requestCheck = ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+//                if (requestCheck) {
+//                    requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 1)
+//                } else {
+//                    AlertDialog.Builder(this@MainActivity)
+//                            .setTitle("Permission Required")
+//                            .setMessage("Please enable location permission to use this application.")
+//                            .setNeutralButton("I Understand", null)
+//                            .show()
+//                }
+//            } else {
+//                buttonScanOnClickProcess() //Alert Dialog for selecting the BLE device
+//            }
+//        }
+
+//        buttonSync = findViewById<View>(R.id.syncButton) as Button
+//        buttonSync!!.setOnClickListener {
+//            serialSend("Z\n")
+//            isSyncing = true
+//        }
+
+
 
         //textView fingers
         fingerText[0] = findViewById<View>(R.id.finger0text) as TextView
@@ -134,12 +144,46 @@ class MainActivity : BlunoLibrary() {
             }
         }
         //val receivedEditText = findViewById<View>(R.id.editText2) as TextView
-        debugSwitch = findViewById(R.id.debuggingSwitch)
-        debugSwitch!!.setOnClickListener {
-            if (debugSwitch!!.isChecked) setDebug(View.VISIBLE)
-            else setDebug(View.GONE)
+//        debugSwitch = findViewById(R.id.debuggingSwitch)
+//        debugSwitch!!.setOnClickListener {
+//            if (debugSwitch!!.isChecked) setDebug(View.VISIBLE)
+//            else setDebug(View.GONE)
+//        }
+        topAppBar!!.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.syncButtonToolbar->{
+                    serialSend("Z\n")
+                    isSyncing = true
+                    true
+                }
+                R.id.connect->{
+                    //Snackbar.make(topAppBar!!, "connecting", Snackbar.LENGTH_SHORT).show()
+                    val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
+                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                        val requestCheck = ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+                        if (requestCheck) {
+                            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                        } else {
+                            AlertDialog.Builder(this@MainActivity)
+                                    .setTitle("Permission Required")
+                                    .setMessage("Please enable location permission to use this application.")
+                                    .setNeutralButton("I Understand", null)
+                                    .show()
+                        }
+                    } else {
+                        buttonScanOnClickProcess() //Alert Dialog for selecting the BLE device
+                    }
+                    true
+                }
+                R.id.toolbarDebug->{
+                    menuItem.isChecked = !menuItem.isChecked
+                    if (menuItem.isChecked) setDebug(View.VISIBLE)
+                    else setDebug(View.GONE)
+                    true
+                }
+                else->false
+            }
         }
-
         loadData()
     }
     private fun setDebug(v: Int){
@@ -164,7 +208,7 @@ class MainActivity : BlunoLibrary() {
     private fun saveExit(){
         val sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putBoolean(DEBUG_SAVE, debugSwitch!!.isChecked)
+        editor.putBoolean(DEBUG_SAVE, topAppBar!!.menu.findItem(R.id.toolbarDebug).isChecked)
         editor.apply()
     }
     private fun loadData() {
@@ -188,7 +232,7 @@ class MainActivity : BlunoLibrary() {
 
         }
         val isChecked: Boolean = sharedPreferences.getBoolean(DEBUG_SAVE, true)
-        debugSwitch?.isChecked = isChecked //set checked value
+        topAppBar!!.menu.findItem(R.id.toolbarDebug).isChecked = isChecked
         if (isChecked) setDebug(View.VISIBLE)
         else setDebug(View.GONE)
     }
@@ -223,11 +267,33 @@ class MainActivity : BlunoLibrary() {
     @SuppressLint("SetTextI18n")
     override fun onConectionStateChange(theConnectionState: connectionStateEnum) { //Once connection state changes, this function will be called
         when (theConnectionState) {
-            connectionStateEnum.isConnected -> buttonScan!!.text = "Connected"
-            connectionStateEnum.isConnecting -> buttonScan!!.text = "Connecting"
-            connectionStateEnum.isToScan -> buttonScan!!.text = "Scan"
-            connectionStateEnum.isScanning -> buttonScan!!.text = "Scanning"
-            connectionStateEnum.isDisconnecting -> buttonScan!!.text = "isDisconnecting"
+            connectionStateEnum.isConnected -> {
+                //buttonScan!!.text = "Connected"
+                topAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_connected_24)
+                topAppBar!!.menu.findItem(R.id.syncButtonToolbar).isVisible = true
+                topAppBar!!.title = "Connected"
+            }
+            connectionStateEnum.isConnecting -> {
+                //buttonScan!!.text = "Connecting"
+                topAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_more_horiz_24)
+                topAppBar!!.title = "Connecting"
+            }
+            connectionStateEnum.isToScan -> {
+                //buttonScan!!.text = "Scan"
+                topAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_disabled_24)
+                topAppBar!!.menu.findItem(R.id.syncButtonToolbar).isVisible = false
+                topAppBar!!.title = "Disconnected"
+            }
+            connectionStateEnum.isScanning -> {
+                //buttonScan!!.text = "Scanning"
+                topAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_searching_24)
+                topAppBar!!.title = "Scanning"
+            }
+            connectionStateEnum.isDisconnecting -> {
+                //buttonScan!!.text = "isDisconnecting"
+                topAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_more_horiz_24)
+                topAppBar!!.title = "Disconnecting"
+            }
             else -> {
             }
         }

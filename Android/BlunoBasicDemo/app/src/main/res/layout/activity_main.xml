@@ -14,7 +14,6 @@
             android:layout_height="?attr/actionBarSize"
             app:title="Hand Control"
             app:menu="@menu/menu_main"
-            app:navigationIcon="@mipmap/ic_launcher"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"/>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -62,8 +61,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/scrollView"
-                android:layout_below="@id/linearTop"
-                android:layout_marginTop="10dp"
+
+                android:layout_alignParentTop="true"
                 android:text="Send Data" />
 
             <TextView
@@ -81,9 +80,9 @@
                 android:id="@+id/serialSendText"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_below="@+id/linearTop"
+
                 android:layout_alignStart="@id/scrollView"
-                android:layout_marginTop="10dp"
+                android:layout_alignParentTop="true"
                 android:layout_marginEnd="5dp"
                 android:layout_toStartOf="@+id/buttonSerialSend"
                 android:background="#F1F1F1"
@@ -101,48 +100,48 @@
                 android:singleLine="false"
                 android:textColor="#111111"
                 android:textSize="15sp" />
-            <LinearLayout
-                android:id="@+id/linearTop"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_centerHorizontal="true">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/linearTop"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:layout_marginLeft="20dp"-->
+<!--                android:layout_marginRight="20dp"-->
+<!--                android:layout_centerHorizontal="true">-->
 
-                <Button
-                    android:id="@+id/buttonScan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Scan" />
+<!--&lt;!&ndash;                <Button&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:id="@+id/buttonScan"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:text="Scan" />&ndash;&gt;-->
 
-<!--                <Button-->
-<!--                    android:id="@+id/syncButton"-->
-<!--                    android:layout_width="35dp"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_marginStart="5dp"-->
+<!--&lt;!&ndash;                <Button&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:id="@+id/syncButton"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="35dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_marginStart="5dp"&ndash;&gt;-->
 
-<!--                    android:insetLeft="0dp"-->
-<!--                    android:insetRight="0dp"-->
+<!--&lt;!&ndash;                    android:insetLeft="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:insetRight="0dp"&ndash;&gt;-->
 
-<!--                    android:paddingLeft="5dp"-->
-<!--                    android:paddingRight="5dp"-->
-<!--                    app:icon="@android:drawable/ic_popup_sync"-->
-<!--                    app:iconPadding="0dp"-->
-<!--                    app:iconSize="25dp" />-->
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
+<!--&lt;!&ndash;                    android:paddingLeft="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:paddingRight="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:icon="@android:drawable/ic_popup_sync"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:iconPadding="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:iconSize="25dp" />&ndash;&gt;-->
+<!--                <View-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_weight="1"/>-->
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/debuggingSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:checked="true"
-                    android:text="Debug" />
-            </LinearLayout>
+<!--                <com.google.android.material.switchmaterial.SwitchMaterial-->
+<!--                    android:id="@+id/debuggingSwitch"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:checked="true"-->
+<!--                    android:text="Debug" />-->
+<!--            </LinearLayout>-->
 
 
             <LinearLayout

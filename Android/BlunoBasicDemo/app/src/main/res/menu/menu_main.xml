@@ -7,20 +7,30 @@
         android:contentDescription="Sync"
         android:icon="@drawable/ic_baseline_sync_24"
         android:title="Sync"
+        android:titleCondensed="Sync"
+        android:tooltipText="Sync"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/connect"
         android:contentDescription="Scan"
         android:icon="@drawable/ic_baseline_bluetooth_disabled_24"
         android:title="Scan"
-        app:showAsAction="ifRoom" />
-
+        app:showAsAction="always"
+        />
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_baseline_settings_24"
-        android:tooltipText="Settings"
-        android:titleCondensed="Settings"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:id="@+id/toolbarDebug"
+        android:checkable="true"
+        android:checked="false"
+        android:title="Debug"
+        android:titleCondensed="Debug"
+        app:showAsAction="withText" />
+
+<!--    <item-->
+<!--        android:id="@+id/action_settings"-->
+<!--        android:orderInCategory="100"-->
+<!--        android:icon="@drawable/ic_baseline_settings_24"-->
+<!--        android:tooltipText="Settings"-->
+<!--        android:titleCondensed="Settings"-->
+<!--        android:title="@string/action_settings"-->
+<!--        app:showAsAction="never" />-->
 </menu>
