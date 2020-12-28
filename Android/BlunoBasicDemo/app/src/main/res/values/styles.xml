@@ -4,10 +4,12 @@
 <!--    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">-->
 <!--        <item name="appBarLayoutStyle">@style/appbarColor</item>-->
 <!--    </style>-->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:textColorPrimary">#FFFFFF</item>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
         <item name="colorAccent">#dc6803</item>
         <item name="colorPrimary">#0377dc</item>
         <item name="colorPrimaryDark">#004c8c</item>
+        <item name="colorControlNormal">#ffffff</item>
     </style>
+
 </resources>

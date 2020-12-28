@@ -3,8 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.dfrobot.angelo.blunobasicdemo.MainActivity">
     <item
+        android:id="@+id/syncButtonToolbar"
+        android:contentDescription="Sync"
+        android:icon="@drawable/ic_baseline_sync_24"
+        android:title="Sync"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/connect"
+        android:contentDescription="Scan"
+        android:icon="@drawable/ic_baseline_bluetooth_disabled_24"
+        android:title="Scan"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:tooltipText="Settings"
+        android:titleCondensed="Settings"
         android:title="@string/action_settings"
         app:showAsAction="never" />
 </menu>
