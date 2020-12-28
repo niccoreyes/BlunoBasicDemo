@@ -11,19 +11,23 @@
         android:tooltipText="Sync"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/toolbarDebug"
+        android:checkable="true"
+        android:checked="false"
+        android:icon="@drawable/ic_baseline_bug_report_24"
+        android:iconTint="#FFFFFF"
+        android:title="Debug"
+        android:titleCondensed="Debug"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/connect"
         android:contentDescription="Scan"
         android:icon="@drawable/ic_baseline_bluetooth_disabled_24"
         android:title="Scan"
         app:showAsAction="always"
         />
-    <item
-        android:id="@+id/toolbarDebug"
-        android:checkable="true"
-        android:checked="false"
-        android:title="Debug"
-        android:titleCondensed="Debug"
-        app:showAsAction="withText" />
+
 
 <!--    <item-->
 <!--        android:id="@+id/action_settings"-->

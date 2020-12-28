@@ -177,6 +177,7 @@ class MainActivity : BlunoLibrary() {
                 }
                 R.id.toolbarDebug->{
                     menuItem.isChecked = !menuItem.isChecked
+
                     if (menuItem.isChecked) setDebug(View.VISIBLE)
                     else setDebug(View.GONE)
                     true
@@ -187,6 +188,8 @@ class MainActivity : BlunoLibrary() {
         loadData()
     }
     private fun setDebug(v: Int){
+        if (v == View.VISIBLE)topAppBar!!.menu.findItem(R.id.toolbarDebug).icon.setTint(ContextCompat.getColor(this,android.R.color.white))
+        else topAppBar!!.menu.findItem(R.id.toolbarDebug).icon.setTint(ContextCompat.getColor(this,R.color.gray))
         buttonSerialSend!!.visibility = v
         serialSendText!!.visibility = v
         findViewById<View>(R.id.editText2)!!.visibility = v

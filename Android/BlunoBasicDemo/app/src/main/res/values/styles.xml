@@ -11,5 +11,5 @@
         <item name="colorPrimaryDark">#004c8c</item>
         <item name="colorControlNormal">#ffffff</item>
     </style>
-
+    <color name="gray">#74B6B6B6</color>
 </resources>
