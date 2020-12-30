@@ -20,13 +20,13 @@
         android:titleCondensed="Debug"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/connect"
-        android:contentDescription="Scan"
-        android:icon="@drawable/ic_baseline_bluetooth_disabled_24"
-        android:title="Scan"
-        app:showAsAction="always"
-        />
+<!--    <item-->
+<!--        android:id="@+id/connect"-->
+<!--        android:contentDescription="Scan"-->
+<!--        android:icon="@drawable/ic_baseline_bluetooth_disabled_24"-->
+<!--        android:title="Scan"-->
+<!--        app:showAsAction="always"-->
+<!--        />-->
 
 
 <!--    <item-->

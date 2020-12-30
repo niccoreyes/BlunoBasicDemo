@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
 <!--    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">-->
@@ -11,7 +11,8 @@
         <item name="android:statusBarColor">#ffffff</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="colorControlNormal">#ffffff</item>
-        <item name="android:navigationBarColor">#0377dc</item>
+        <item name="android:navigationBarColor">#ffffff</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
     </style>
     <style name="AppBarTop" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="colorAccent">#dc6803</item>
@@ -23,9 +24,9 @@
         <item name="tint">#111111</item>
     </style>
     <color name="gray">#74B6B6B6</color>
+    <color name="clickable">#004c8c</color>
     <style name="bottomAppStyle" parent="Widget.MaterialComponents.BottomAppBar">
-        <item name="iconTint">#ffffff</item>
-        <item name="tint">#ffffff</item>
-        <item name="android:backgroundTint">#0377dc</item>
+        <item name="android:backgroundTint">#ffffff</item>
+        <item name="android:textColorPrimary">#111111</item>
     </style>
 </resources>
