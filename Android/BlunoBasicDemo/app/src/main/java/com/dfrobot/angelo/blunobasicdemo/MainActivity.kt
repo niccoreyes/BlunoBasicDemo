@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import kotlin.math.roundToInt
@@ -37,6 +38,8 @@ class MainActivity : BlunoLibrary() {
     private var isSyncing = false
     private var syncString = ""
     private var topAppBar: MaterialToolbar? = null
+    private var bottomAppBar: BottomAppBar? = null
+    private var topAppBarTitle : TextView? = null
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +48,8 @@ class MainActivity : BlunoLibrary() {
         //setSupportActionBar(findViewById(R.id.my_toolbar))
         onCreateProcess() //onCreate Process by BlunoLibrary
         topAppBar = findViewById<View>(R.id.topAppBar) as MaterialToolbar
-
+        bottomAppBar = findViewById<View>(R.id.bottomApp)as BottomAppBar
+        topAppBarTitle = findViewById<View>(R.id.toolbar_title) as TextView
         requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 1)
         serialBegin(115200) //set the Uart Baudrate on BLE chip to 115200
 
@@ -149,7 +153,7 @@ class MainActivity : BlunoLibrary() {
 //            if (debugSwitch!!.isChecked) setDebug(View.VISIBLE)
 //            else setDebug(View.GONE)
 //        }
-        topAppBar!!.setOnMenuItemClickListener { menuItem ->
+        bottomAppBar!!.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.syncButtonToolbar->{
                     serialSend("Z\n")
@@ -157,7 +161,7 @@ class MainActivity : BlunoLibrary() {
                     true
                 }
                 R.id.connect->{
-                    //Snackbar.make(topAppBar!!, "connecting", Snackbar.LENGTH_SHORT).show()
+                    //Snackbar.make(bottomAppBar!!, "connecting", Snackbar.LENGTH_SHORT).show()
                     val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
                     if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
                         val requestCheck = ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -188,8 +192,8 @@ class MainActivity : BlunoLibrary() {
         loadData()
     }
     private fun setDebug(v: Int){
-        if (v == View.VISIBLE)topAppBar!!.menu.findItem(R.id.toolbarDebug).icon.setTint(ContextCompat.getColor(this,android.R.color.white))
-        else topAppBar!!.menu.findItem(R.id.toolbarDebug).icon.setTint(ContextCompat.getColor(this,R.color.gray))
+        if (v == View.VISIBLE)bottomAppBar!!.menu.findItem(R.id.toolbarDebug).icon.setTint(ContextCompat.getColor(this,android.R.color.white))
+        else bottomAppBar!!.menu.findItem(R.id.toolbarDebug).icon.setTint(ContextCompat.getColor(this,R.color.gray))
         buttonSerialSend!!.visibility = v
         serialSendText!!.visibility = v
         findViewById<View>(R.id.editText2)!!.visibility = v
@@ -211,7 +215,7 @@ class MainActivity : BlunoLibrary() {
     private fun saveExit(){
         val sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putBoolean(DEBUG_SAVE, topAppBar!!.menu.findItem(R.id.toolbarDebug).isChecked)
+        editor.putBoolean(DEBUG_SAVE, bottomAppBar!!.menu.findItem(R.id.toolbarDebug).isChecked)
         editor.apply()
     }
     private fun loadData() {
@@ -235,7 +239,7 @@ class MainActivity : BlunoLibrary() {
 
         }
         val isChecked: Boolean = sharedPreferences.getBoolean(DEBUG_SAVE, true)
-        topAppBar!!.menu.findItem(R.id.toolbarDebug).isChecked = isChecked
+        bottomAppBar!!.menu.findItem(R.id.toolbarDebug).isChecked = isChecked
         if (isChecked) setDebug(View.VISIBLE)
         else setDebug(View.GONE)
     }
@@ -272,30 +276,30 @@ class MainActivity : BlunoLibrary() {
         when (theConnectionState) {
             connectionStateEnum.isConnected -> {
                 //buttonScan!!.text = "Connected"
-                topAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_connected_24)
-                topAppBar!!.menu.findItem(R.id.syncButtonToolbar).isVisible = true
-                topAppBar!!.title = "Connected"
+                bottomAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_connected_24)
+                bottomAppBar!!.menu.findItem(R.id.syncButtonToolbar).isVisible = true
+                topAppBarTitle!!.text = "Connected"
             }
             connectionStateEnum.isConnecting -> {
                 //buttonScan!!.text = "Connecting"
-                topAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_more_horiz_24)
-                topAppBar!!.title = "Connecting"
+                bottomAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_more_horiz_24)
+                topAppBarTitle!!.text = "Connecting"
             }
             connectionStateEnum.isToScan -> {
                 //buttonScan!!.text = "Scan"
-                topAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_disabled_24)
-                topAppBar!!.menu.findItem(R.id.syncButtonToolbar).isVisible = false
-                topAppBar!!.title = "Disconnected"
+                bottomAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_disabled_24)
+                bottomAppBar!!.menu.findItem(R.id.syncButtonToolbar).isVisible = false
+                topAppBarTitle!!.text = "Disconnected"
             }
             connectionStateEnum.isScanning -> {
                 //buttonScan!!.text = "Scanning"
-                topAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_searching_24)
-                topAppBar!!.title = "Scanning"
+                bottomAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_searching_24)
+                topAppBarTitle!!.text = "Scanning"
             }
             connectionStateEnum.isDisconnecting -> {
                 //buttonScan!!.text = "isDisconnecting"
-                topAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_more_horiz_24)
-                topAppBar!!.title = "Disconnecting"
+                bottomAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_more_horiz_24)
+                topAppBarTitle!!.text = "Disconnecting"
             }
             else -> {
             }
