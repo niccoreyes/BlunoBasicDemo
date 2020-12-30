@@ -8,8 +8,24 @@
 
         <item name="colorAccent">#dc6803</item>
         <item name="colorPrimary">#0377dc</item>
-        <item name="colorPrimaryDark">#004c8c</item>
+        <item name="android:statusBarColor">#ffffff</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="colorControlNormal">#ffffff</item>
+        <item name="android:navigationBarColor">#0377dc</item>
+    </style>
+    <style name="AppBarTop" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="colorAccent">#dc6803</item>
+        <item name="colorPrimary">#0377dc</item>
+        <item name="colorPrimaryDark">#004c8c</item>
+        <item name="colorControlNormal">#111111</item>
+<!--        <item name="android:background">#ffffff</item>-->
+        <item name="iconTint">#111111</item>
+        <item name="tint">#111111</item>
     </style>
     <color name="gray">#74B6B6B6</color>
+    <style name="bottomAppStyle" parent="Widget.MaterialComponents.BottomAppBar">
+        <item name="iconTint">#ffffff</item>
+        <item name="tint">#ffffff</item>
+        <item name="android:backgroundTint">#0377dc</item>
+    </style>
 </resources>

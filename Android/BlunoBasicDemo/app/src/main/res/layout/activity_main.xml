@@ -2,7 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -10,21 +12,26 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
+            style="@style/AppBarTop"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Hand Control"
-            app:menu="@menu/menu_main"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"/>
+            android:background="#ffffff"
 
+            app:menu="@menu/menu_main"
+            app:title="Hand Control"
+            app:titleTextColor="#111111" />
     </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/nestedScrollView"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:elevation="0dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
+            android:id="@+id/relativeLayoutMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="true"
@@ -32,8 +39,8 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            tools:context=".MainActivity">
+            android:paddingBottom="@dimen/activity_vertical_margin">
+
 
             <ScrollView
                 android:id="@+id/scrollView"
@@ -41,10 +48,10 @@
                 android:layout_height="80dp"
                 android:layout_below="@+id/editText2"
                 android:layout_centerHorizontal="true"
-                android:background="#F8F8F8"
-                android:nestedScrollingEnabled="true"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginRight="20dp"
+                android:background="#F8F8F8"
+                android:nestedScrollingEnabled="true">
 
                 <TextView
                     android:id="@+id/serialReveicedText"
@@ -100,59 +107,60 @@
                 android:singleLine="false"
                 android:textColor="#111111"
                 android:textSize="15sp" />
-<!--            <LinearLayout-->
-<!--                android:id="@+id/linearTop"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:layout_marginLeft="20dp"-->
-<!--                android:layout_marginRight="20dp"-->
-<!--                android:layout_centerHorizontal="true">-->
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/linearTop"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:orientation="horizontal"-->
+            <!--                android:layout_marginLeft="20dp"-->
+            <!--                android:layout_marginRight="20dp"-->
+            <!--                android:layout_centerHorizontal="true">-->
 
-<!--&lt;!&ndash;                <Button&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:id="@+id/buttonScan"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:layout_width="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:text="Scan" />&ndash;&gt;-->
+            <!--&lt;!&ndash;                <Button&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:id="@+id/buttonScan"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:text="Scan" />&ndash;&gt;-->
 
-<!--&lt;!&ndash;                <Button&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:id="@+id/syncButton"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:layout_width="35dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:layout_height="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:layout_marginStart="5dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;                <Button&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:id="@+id/syncButton"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:layout_width="35dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:layout_height="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:layout_marginStart="5dp"&ndash;&gt;-->
 
-<!--&lt;!&ndash;                    android:insetLeft="0dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:insetRight="0dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:insetLeft="0dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:insetRight="0dp"&ndash;&gt;-->
 
-<!--&lt;!&ndash;                    android:paddingLeft="5dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:paddingRight="5dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                    app:icon="@android:drawable/ic_popup_sync"&ndash;&gt;-->
-<!--&lt;!&ndash;                    app:iconPadding="0dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                    app:iconSize="25dp" />&ndash;&gt;-->
-<!--                <View-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    android:layout_weight="1"/>-->
+            <!--&lt;!&ndash;                    android:paddingLeft="5dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:paddingRight="5dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    app:icon="@android:drawable/ic_popup_sync"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    app:iconPadding="0dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    app:iconSize="25dp" />&ndash;&gt;-->
+            <!--                <View-->
+            <!--                    android:layout_width="0dp"-->
+            <!--                    android:layout_height="0dp"-->
+            <!--                    android:layout_weight="1"/>-->
 
-<!--                <com.google.android.material.switchmaterial.SwitchMaterial-->
-<!--                    android:id="@+id/debuggingSwitch"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="10dp"-->
-<!--                    android:checked="true"-->
-<!--                    android:text="Debug" />-->
-<!--            </LinearLayout>-->
+            <!--                <com.google.android.material.switchmaterial.SwitchMaterial-->
+            <!--                    android:id="@+id/debuggingSwitch"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginStart="10dp"-->
+            <!--                    android:checked="true"-->
+            <!--                    android:text="Debug" />-->
+            <!--            </LinearLayout>-->
 
 
             <LinearLayout
-                android:orientation="vertical"
+                android:id="@+id/sliderLinear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/scrollView"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
-                android:id="@+id/sliderLinear">
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/safeZoneText"
                     android:layout_width="wrap_content"
@@ -164,14 +172,15 @@
                     android:id="@+id/safeZoneBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:stepSize="1"
                     android:valueFrom="0.0"
                     android:valueTo="20.0"
-                    android:stepSize="1"
                     app:haloColor="#dc6803"
                     app:thumbColor="#dc6803"
                     app:tickColor="#dc6803"
                     app:trackColorActive="#dc6803"
                     app:trackColorInactive="#DFC4AD" />
+
                 <TextView
                     android:id="@+id/finger0text"
                     android:layout_width="wrap_content"
@@ -181,11 +190,11 @@
 
                 <com.google.android.material.slider.Slider
                     android:id="@+id/finger0Bar"
-                    android:valueFrom="0"
-                    android:valueTo="100"
-                    android:stepSize="1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:valueFrom="0"
+                    android:valueTo="100" />
 
                 <TextView
                     android:id="@+id/finger1text"
@@ -196,11 +205,11 @@
 
                 <com.google.android.material.slider.Slider
                     android:id="@+id/finger1Bar"
-                    android:valueFrom="0"
-                    android:valueTo="100"
-                    android:stepSize="1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:valueFrom="0"
+                    android:valueTo="100" />
 
                 <TextView
                     android:id="@+id/finger2text"
@@ -211,11 +220,11 @@
 
                 <com.google.android.material.slider.Slider
                     android:id="@+id/finger2Bar"
-                    android:valueFrom="0"
-                    android:valueTo="100"
-                    android:stepSize="1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:valueFrom="0"
+                    android:valueTo="100" />
 
                 <TextView
                     android:id="@+id/finger3text"
@@ -223,61 +232,68 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:text="Finger 3: 0" />
+
                 <com.google.android.material.slider.Slider
                     android:id="@+id/finger3Bar"
-                    android:valueFrom="0"
-                    android:valueTo="100"
-                    android:stepSize="1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:valueFrom="0"
+                    android:valueTo="100" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/sliderLinear"
-                android:orientation="vertical"
                 android:layout_marginTop="20dp"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     tools:ignore="UselessParent">
+
                     <Button
                         android:id="@+id/fistBtn"
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:text="Fist"
                         android:layout_margin="5dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:text="Fist" />
+
                     <Button
                         android:id="@+id/palmBtn"
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:text="Palm"
                         android:layout_margin="5dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:text="Palm" />
+
                     <Button
                         android:id="@+id/tripodBtn"
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:text="Tripod"
                         android:layout_margin="5dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:text="Tripod" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     tools:ignore="UselessParent">
+
                     <Button
                         android:id="@+id/pinchBtn"
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:text="Pinch"
                         android:layout_margin="5dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:text="Pinch" />
 
                     <Button
                         android:id="@+id/pointBtn"
@@ -291,12 +307,34 @@
                         android:id="@+id/customBtn"
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_margin="5dp"
+                        android:layout_weight="1"
                         android:text="Open" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp" />
             </LinearLayout>
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomApp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:theme="@style/bottomAppStyle"
+        app:menu="@menu/menu_main"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/relativeLayoutMain"
+        android:layout_margin="20dp"
+        android:contentDescription="Connect"
+        android:src="@drawable/ic_baseline_bluetooth_disabled_24"
+        app:layout_anchor="@id/bottomApp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
