@@ -8,17 +8,19 @@
 
         <item name="colorAccent">#dc6803</item>
         <item name="colorPrimary">#0377dc</item>
-        <item name="android:statusBarColor">#ffffff</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimaryDark">#111111</item>
+        <item name="android:statusBarColor">#0377dc</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="colorControlNormal">#ffffff</item>
         <item name="android:navigationBarColor">#ffffff</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+        <item name="shapeAppearanceSmallComponent">@style/RoundButton</item>
+        <item name="shapeAppearanceMediumComponent">@style/RoundButton</item>
     </style>
     <style name="AppBarTop" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="colorAccent">#dc6803</item>
         <item name="colorPrimary">#0377dc</item>
         <item name="colorPrimaryDark">#004c8c</item>
-        <item name="colorControlNormal">#111111</item>
 <!--        <item name="android:background">#ffffff</item>-->
         <item name="iconTint">#111111</item>
         <item name="tint">#111111</item>
@@ -26,7 +28,14 @@
     <color name="gray">#74B6B6B6</color>
     <color name="clickable">#004c8c</color>
     <style name="bottomAppStyle" parent="Widget.MaterialComponents.BottomAppBar">
+        <item name="iconTint">#111111</item>
         <item name="android:backgroundTint">#ffffff</item>
         <item name="android:textColorPrimary">#111111</item>
     </style>
+
+    <style name="RoundButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
 </resources>

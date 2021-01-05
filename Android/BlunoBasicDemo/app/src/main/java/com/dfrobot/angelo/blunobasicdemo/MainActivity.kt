@@ -23,14 +23,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.textfield.TextInputEditText
 import kotlin.math.roundToInt
 
 class MainActivity : BlunoLibrary() {
     //private var buttonScan: Button? = null
     private var buttonSerialSend: Button? = null
-    private var serialSendText: EditText? = null
+    private var serialSendText: TextInputEditText? = null
     private var serialReceivedText: TextView? = null
-    //private var debugSwitch: SwitchCompat? = null
+    private var debugSwitch: SwitchMaterial? = null
     //private var buttonSync: Button? = null
     private val fingerText = arrayOfNulls<TextView>(4)
     private val fingerSlider = arrayOfNulls<Slider>(4)
@@ -41,7 +43,7 @@ class MainActivity : BlunoLibrary() {
     private var isSyncing = false
     private var syncString = ""
     private var topAppBar: MaterialToolbar? = null
-    private var bottomAppBar: BottomNavigationView? = null
+    //private var bottomAppBar: BottomAppBar? = null
     private var topAppBarTitle : TextView? = null
     private var fabBluetoothButton : FloatingActionButton? = null
     private var debugStatus: Boolean = false
@@ -53,14 +55,14 @@ class MainActivity : BlunoLibrary() {
         //setSupportActionBar(findViewById(R.id.my_toolbar))
         onCreateProcess() //onCreate Process by BlunoLibrary
         topAppBar = findViewById<View>(R.id.topAppBar) as MaterialToolbar
-        bottomAppBar = findViewById<View>(R.id.bottomNavigation)as BottomNavigationView
+        //bottomAppBar = findViewById<View>(R.id.bottomApp)as BottomAppBar
         topAppBarTitle = findViewById<View>(R.id.toolbar_title) as TextView
         fabBluetoothButton = findViewById<View>(R.id.fabBluetooth) as FloatingActionButton
         requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 1)
         serialBegin(115200) //set the Uart Baudrate on BLE chip to 115200
 
         serialReceivedText = findViewById<View>(R.id.serialReveicedText) as TextView //initial the EditText of the received data
-        serialSendText = findViewById<View>(R.id.serialSendText) as EditText //initial the EditText of the sending data
+        serialSendText = findViewById<View>(R.id.textinputeditSend) as TextInputEditText //initial the TextInputEditText of the sending data
         buttonSerialSend = findViewById<View>(R.id.buttonSerialSend) as Button //initial the button for sending the data
         buttonSerialSend!!.setOnClickListener {
             serialSend(serialSendText!!.text.toString() + "\n") //send the data to the BLUNO
@@ -106,13 +108,12 @@ class MainActivity : BlunoLibrary() {
             fingerSlider[a]!!.addOnChangeListener { slider, i, fromUser ->
                 if(!isSyncing) {
                     val toSend = "F$a P${i.roundToInt()}"
-                    serialSendText!!.setText(toSend)
+                    if (debugStatus) serialSendText!!.setText(toSend)
                     serialSend(toSend + "\n")
                 }
                 fingerText[a]!!.text = "Finger $a: ${i.roundToInt()}"
             }
         }
-
         safeZoneText = findViewById<View>(R.id.safeZoneText) as TextView
         safeZoneSlider = findViewById<View>(R.id.safeZoneBar) as Slider
         safeZoneSlider!!.addOnChangeListener { slider, value, fromUser ->
@@ -153,12 +154,12 @@ class MainActivity : BlunoLibrary() {
                 false
             }
         }
-        //val receivedEditText = findViewById<View>(R.id.editText2) as TextView
-//        debugSwitch = findViewById(R.id.debuggingSwitch)
-//        debugSwitch!!.setOnClickListener {
-//            if (debugSwitch!!.isChecked) setDebug(View.VISIBLE)
-//            else setDebug(View.GONE)
-//        }
+        debugSwitch = findViewById(R.id.debugSwitch)
+        debugSwitch!!.setOnClickListener {
+            debugStatus = !debugStatus
+            if (debugStatus) setDebug(View.VISIBLE)
+            else setDebug(View.GONE)
+        }
         fabBluetoothButton!!.setOnClickListener {
             val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
             if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -176,55 +177,59 @@ class MainActivity : BlunoLibrary() {
                 buttonScanOnClickProcess() //Alert Dialog for selecting the BLE device
             }
         }
-        bottomAppBar!!.setOnNavigationItemSelectedListener { menuItem ->
-            when(menuItem.itemId){
-                R.id.syncButtonToolbar->{
-                    serialSend("Z\n")
-                    isSyncing = true
-                    true
-                }
-//                R.id.connect->{
-//                    //Snackbar.make(bottomAppBar!!, "connecting", Snackbar.LENGTH_SHORT).show()
-//                    val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
-//                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-//                        val requestCheck = ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION)
-//                        if (requestCheck) {
-//                            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 1)
-//                        } else {
-//                            AlertDialog.Builder(this@MainActivity)
-//                                    .setTitle("Permission Required")
-//                                    .setMessage("Please enable location permission to use this application.")
-//                                    .setNeutralButton("I Understand", null)
-//                                    .show()
-//                        }
-//                    } else {
-//                        buttonScanOnClickProcess() //Alert Dialog for selecting the BLE device
-//                    }
+//        bottomAppBar!!.setOnMenuItemClickListener { menuItem ->
+//            when(menuItem.itemId){
+//                R.id.syncButtonToolbar->{
+//                    serialSend("Z\n")
+//                    isSyncing = true
 //                    true
 //                }
-                R.id.toolbarDebug->{
-                    menuItem.isChecked = !menuItem.isChecked
-                    debugStatus = !debugStatus
-                    Snackbar.make(bottomAppBar!!, debugStatus.toString(), Snackbar.LENGTH_SHORT).setAnchorView(R.id.fabBluetooth).show()
-                    if (debugStatus) setDebug(View.VISIBLE)
-                    else setDebug(View.GONE)
-                    true
-                }
-                else->false
-            }
-        }
+////                R.id.connect->{
+////                    //Snackbar.make(bottomAppBar!!, "connecting", Snackbar.LENGTH_SHORT).show()
+////                    val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
+////                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+////                        val requestCheck = ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+////                        if (requestCheck) {
+////                            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 1)
+////                        } else {
+////                            AlertDialog.Builder(this@MainActivity)
+////                                    .setTitle("Permission Required")
+////                                    .setMessage("Please enable location permission to use this application.")
+////                                    .setNeutralButton("I Understand", null)
+////                                    .show()
+////                        }
+////                    } else {
+////                        buttonScanOnClickProcess() //Alert Dialog for selecting the BLE device
+////                    }
+////                    true
+////                }
+////                R.id.toolbarDebug->{
+////                    menuItem.isChecked = !menuItem.isChecked
+////                    debugStatus = !debugStatus
+////                    //Snackbar.make(bottomAppBar!!, debugStatus.toString(), Snackbar.LENGTH_SHORT).setAnchorView(R.id.fabBluetooth).show()
+////                    if (debugStatus) setDebug(View.VISIBLE)
+////                    else setDebug(View.GONE)
+////                    true
+////                }
+//                else->false
+//            }
+//        }
         loadData()
     }
     private fun setDebug(v: Int){
-        if (v == View.VISIBLE){
 
-            Snackbar.make(bottomAppBar!!, debugStatus.toString(), Snackbar.LENGTH_SHORT).setAnchorView(R.id.fabBluetooth).show()
-            bottomAppBar!!.setItemIconTintList(null);
-            bottomAppBar!!.menu.findItem(R.id.toolbarDebug)
+        if (v == View.VISIBLE){
+            //Snackbar.make(bottomAppBar!!, debugStatus.toString(), Snackbar.LENGTH_SHORT).setAnchorView(R.id.fabBluetooth).show()
+            //bottomAppBar!!.menu.findItem(R.id.toolbarDebug).icon.setTint(ContextCompat.getColor(this,R.color.clickable))
+            debugSwitch!!.isChecked = true
         }
-        else bottomAppBar!!.menu.findItem(R.id.toolbarDebug).icon.setTint(ContextCompat.getColor(this,R.color.gray))
-        buttonSerialSend!!.visibility = v
-        serialSendText!!.visibility = v
+        else{
+            //bottomAppBar!!.menu.findItem(R.id.toolbarDebug).icon.setTint(ContextCompat.getColor(this,R.color.gray))
+            debugSwitch!!.isChecked = false
+        }
+        //findViewById<View>(R.id.fillbackground)!!.visibility = v
+        //buttonSerialSend!!.visibility = v
+        //serialSendText!!.visibility = v
         findViewById<View>(R.id.editText2)!!.visibility = v
         findViewById<View>(R.id.scrollView)!!.visibility = v
         safeZoneSlider!!.visibility = v
@@ -307,7 +312,7 @@ class MainActivity : BlunoLibrary() {
                 //buttonScan!!.text = "Connected"
                 //bottomAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_connected_24)
                 fabBluetoothButton!!.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_connected_24))
-                bottomAppBar!!.menu.findItem(R.id.syncButtonToolbar).isEnabled = true
+                //bottomAppBar!!.menu.findItem(R.id.syncButtonToolbar).isEnabled = true
                 topAppBarTitle!!.text = "Connected"
             }
             connectionStateEnum.isConnecting -> {
@@ -320,7 +325,7 @@ class MainActivity : BlunoLibrary() {
                 //buttonScan!!.text = "Scan"
                 //bottomAppBar!!.menu.findItem(R.id.connect).icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_disabled_24)
                 fabBluetoothButton!!.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_baseline_bluetooth_disabled_24))
-                bottomAppBar!!.menu.findItem(R.id.syncButtonToolbar).isEnabled = false
+                //bottomAppBar!!.menu.findItem(R.id.syncButtonToolbar).isEnabled = false
                 topAppBarTitle!!.text = "Disconnected"
             }
             connectionStateEnum.isScanning -> {
